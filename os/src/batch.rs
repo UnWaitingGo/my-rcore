@@ -6,17 +6,20 @@ use crate::trap::TrapContext;
 use core::arch::asm;
 use lazy_static::*;
 
-const USER_STACK_SIZE: usize = 4096 * 2;
-const KERNEL_STACK_SIZE: usize = 4096 * 2;
+const USER_STACK_SIZE: usize = 4096 * 2; //用户栈大小为8KB
+const KERNEL_STACK_SIZE: usize = 4096 * 2;  //内核栈大小为8KB
+
 const MAX_APP_NUM: usize = 16;
 const APP_BASE_ADDRESS: usize = 0x80400000;
 const APP_SIZE_LIMIT: usize = 0x20000;
 
+// 内核栈 实现
 #[repr(align(4096))]
 struct KernelStack {
     data: [u8; KERNEL_STACK_SIZE],
 }
 
+// 用户栈 实现
 #[repr(align(4096))]
 struct UserStack {
     data: [u8; USER_STACK_SIZE],
@@ -29,7 +32,8 @@ static USER_STACK: UserStack = UserStack {
     data: [0; USER_STACK_SIZE],
 };
 
-impl KernelStack {
+impl KernelStack { 
+    // 内核栈的 get_sp 方法来获取栈顶地址  用户栈同理
     fn get_sp(&self) -> usize {
         self.data.as_ptr() as usize + KERNEL_STACK_SIZE
     }
