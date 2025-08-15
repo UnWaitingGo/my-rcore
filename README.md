@@ -1,4 +1,4 @@
-###lab2代码的结构树
+lab2代码的结构树
 ```
 ├── bootloader
 │   └── rustsbi-qemu.bin
