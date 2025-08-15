@@ -25,7 +25,7 @@ use riscv::register::{
 
 global_asm!(include_str!("trap.S"));
 
-/// initialize CSR `stvec` as the entry of `__alltraps`
+///  将 CSR 寄存器 stvec 初始化为 __alltraps 的入口地址。
 pub fn init() {
     unsafe extern "C" {
         safe fn __alltraps();
@@ -36,10 +36,11 @@ pub fn init() {
 }
 
 #[unsafe(no_mangle)]
-/// handle an interrupt, exception, or system call from user space
+/// 从用户空间处理中断、异常或系统调用
 pub fn trap_handler(cx: &mut TrapContext) -> &mut TrapContext {
-    let scause = scause::read(); // get trap cause
-    let stval = stval::read(); // get extra value
+    let scause = scause::read(); // 获取陷阱（trap）的原因
+    let stval = stval::read(); // 获取额外值。
+    
     match scause.cause() {
         Trap::Exception(Exception::UserEnvCall) => {
             cx.sepc += 4;
@@ -62,6 +63,6 @@ pub fn trap_handler(cx: &mut TrapContext) -> &mut TrapContext {
         }
     }
     cx
-}
+}   
 
 pub use context::TrapContext;

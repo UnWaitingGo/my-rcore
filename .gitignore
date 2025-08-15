@@ -1,8 +1,9 @@
 .*/*
 !.github/*
-!.vscode/settings.json
 !.devcontainer/devcontainer.json
-!.vscode/*
+
+.vscode/*
+.vscode/settings.json
 
 .idea
 **/Cargo.lock
