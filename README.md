@@ -1,4 +1,5 @@
 lab2代码的结构树
+参考书籍：https://rcore-os.cn/rCore-Tutorial-Book-v3/index.html
 ```
 ├── bootloader
 │   └── rustsbi-qemu.bin
