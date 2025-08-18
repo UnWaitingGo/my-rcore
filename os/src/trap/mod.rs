@@ -1,16 +1,16 @@
-//! Trap handling functionality
+//! 陷阱处理功能
 //!
-//! For rCore, we have a single trap entry point, namely `__alltraps`. At
-//! initialization in [`init()`], we set the `stvec` CSR to point to it.
+//! 在 rCore 中，我们有一个唯一的陷阱入口点，即 __alltraps。 
+//! 在 [init()] 初始化时，我们将 stvec 控制状态寄存器（CSR）设置为指向该入口点。
 //!
-//! All traps go through `__alltraps`, which is defined in `trap.S`. The
-//! assembly language code does just enough work restore the kernel space
-//! context, ensuring that Rust code safely runs, and transfers control to
-//! [`trap_handler()`].
+//! 所有陷阱都通过 __alltraps 处理，该入口点在 trap.S 中定义。
+//! 汇编语言代码仅完成恢复内核空间上下文的必要工作，
+//! 确保 Rust 代码能安全运行， 并将控制权转移到 [trap_handler()]。
+//! 
 //!
-//! It then calls different functionality based on what exactly the exception
-//! was. For example, timer interrupts trigger task preemption, and syscalls go
-//! to [`syscall()`].
+//! 随后，它会根据具体的异常类型调用不同的功能。
+//! 例如，定时器中断会触发任务抢占，
+//! 系统调用则会进入 [syscall()] 处理。
 
 mod context;
 
@@ -35,7 +35,7 @@ pub fn init() {
     }
 }
 
-#[unsafe(no_mangle)]
+#[unsafe(no_mangle)] // Rust 2024 Edition新写法 函数或变量保持原有的名称，确保其他语言（如 C、汇编）或外部程序能通过原始名称正确识别和调用它们。
 /// 从用户空间处理中断、异常或系统调用
 pub fn trap_handler(cx: &mut TrapContext) -> &mut TrapContext {
     let scause = scause::read(); // 获取陷阱（trap）的原因

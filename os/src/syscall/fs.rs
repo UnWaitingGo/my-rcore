@@ -1,8 +1,8 @@
-//! File and filesystem-related syscalls
+//! 与文件和文件系统相关的系统调用
 
 const FD_STDOUT: usize = 1;
 
-/// write buf of length `len`  to a file with `fd`
+/// 将长度为 `len` 的缓冲区（buf）写入文件描述符为 `fd` 的文件中
 pub fn sys_write(fd: usize, buf: *const u8, len: usize) -> isize {
     match fd {
         FD_STDOUT => {

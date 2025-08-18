@@ -1,4 +1,4 @@
-//! SBI console driver, for text output
+//! SBI 控制台驱动程序，用于文本输出
 
 use crate::sbi::console_putchar;
 use core::fmt::{self, Write};
@@ -18,15 +18,16 @@ pub fn print(args: fmt::Arguments) {
     Stdout.write_fmt(args).unwrap();
 }
 
-/// print string macro
-#[macro_export]
+/// print 打印字符串的宏
+#[macro_export]  //把宏公开给 crate 内外使用
 macro_rules! print {
     ($fmt: literal $(, $($arg: tt)+)?) => {
         $crate::console::print(format_args!($fmt $(, $($arg)+)?));
     }
 }
 
-/// println string macro
+/// println 打印行字符串的宏
+
 #[macro_export]
 macro_rules! println {
     ($fmt: literal $(, $($arg: tt)+)?) => {

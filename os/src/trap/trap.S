@@ -41,18 +41,18 @@ __alltraps:
     call trap_handler
 
 __restore:
-    # case1: start running app by __restore
-    # case2: back to U after handling trap
+    # 情况 1：通过__restore 启动应用程序
+    # 情况 2：处理完trap后返回用户模式（U 模式）
     mv sp, a0
-    # now sp->kernel stack(after allocated), sscratch->user stack
-    # restore sstatus/sepc
+    # 现在 sp-> 内核栈（已分配后），sscratch-> 用户栈
+    # 恢复 sstatus 和 sepc 寄存器
     ld t0, 32*8(sp)
     ld t1, 33*8(sp)
     ld t2, 2*8(sp)
     csrw sstatus, t0
     csrw sepc, t1
     csrw sscratch, t2
-    # restore general-purpuse registers except sp/tp
+           # 恢复除 sp/tp 之外的通用寄存器
     ld x1, 1*8(sp)
     ld x3, 3*8(sp)
     .set n, 5
@@ -60,8 +60,8 @@ __restore:
         LOAD_GP %n
         .set n, n+1
     .endr
-    # release TrapContext on kernel stack
+            # 释放内核栈上的 TrapContext（陷阱上下文）
     addi sp, sp, 34*8
-    # now sp->kernel stack, sscratch->user stack
+            # 现在 sp-> 内核栈，sscratch-> 用户栈
     csrrw sp, sscratch, sp
-    sret
+    sret               #使用 sret 指令回到 U 特权级继续运行应用程序控制流。

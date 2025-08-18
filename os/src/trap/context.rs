@@ -1,30 +1,30 @@
 use riscv::register::sstatus::{self, SPP, Sstatus};
-/// Trap Context
+/// Trap 上下文
 #[repr(C)]
 pub struct TrapContext {
-    /// general regs[0..31]
+    /// 通用寄存器 [0..31]
     pub x: [usize; 32],
-    /// CSR sstatus      
+    /// sstatus 控制状态寄存器 CSR       
     pub sstatus: Sstatus,
-    /// CSR sepc
+    /// sepc 控制状态寄存器 CSR 
     pub sepc: usize,
 }
 
 impl TrapContext {
-    /// set stack pointer to x_2 reg (sp)
+    /// 设置栈指针 x_2 reg (sp)
     pub fn set_sp(&mut self, sp: usize) {
         self.x[2] = sp;
     }
     /// init app context
     pub fn app_init_context(entry: usize, sp: usize) -> Self {
-        let mut sstatus = sstatus::read(); // CSR sstatus
-        sstatus.set_spp(SPP::User); //previous privilege mode: user mode
+        let mut sstatus = sstatus::read(); // sstatus 控制状态寄存器 CSR
+        sstatus.set_spp(SPP::User); //之前的特权模式：用户模式
         let mut cx = Self {
             x: [0; 32],
             sstatus,
-            sepc: entry, // entry point of app
+            sepc: entry, // 应用程序的入口点
         };
-        cx.set_sp(sp); // app's user stack pointer
-        cx // return initial Trap Context of app
+        cx.set_sp(sp); // 应用程序的用户栈指针
+        cx // 返回应用程序的初始Trap Context
     }
 }

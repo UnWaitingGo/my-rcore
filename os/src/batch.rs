@@ -137,15 +137,14 @@ pub fn print_app_info() {
     APP_MANAGER.exclusive_access().print_app_info();
 }
 
-/// run next app
+/// 运行下一个程序
 pub fn run_next_app() -> ! {
     let mut app_manager = APP_MANAGER.exclusive_access();
     let current_app = app_manager.get_current_app();
     app_manager.load_app(current_app);
     app_manager.move_to_next_app();
     drop(app_manager);
-    // before this we have to drop local variables related to resources manually
-    // and release the resources
+    // 在此之前，我们必须手动销毁与资源相关的局部变量，并释放这些资源。
     unsafe extern "C" {
         unsafe fn __restore(cx_addr: usize);
     }
